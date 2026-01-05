@@ -289,6 +289,37 @@
             color: #495057;
         }
 
+        /* FAQ Restore Button */
+        .faq-restore-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 24px 16px;
+            padding: 10px 16px;
+            background-color: #f8f9fa;
+            border: 1px dashed #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #868e96;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .faq-restore-btn:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            color: #495057;
+        }
+
+        .faq-restore-btn.hidden {
+            display: none;
+        }
+
+        .faq-restore-btn svg {
+            color: currentColor;
+        }
+
         .faq-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -376,6 +407,151 @@
             cursor: not-allowed;
         }
 
+        /* Desktop/Mobile visibility */
+        .desktop-only {
+            display: flex;
+            align-items: center;
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        /* Hamburger Menu */
+        .mobile-menu-container {
+            position: relative;
+        }
+
+        .hamburger-btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            gap: 5px;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .hamburger-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background-color: #495057;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 16px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: #495057;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .mobile-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-item:not(:last-child) {
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .mobile-menu-item svg {
+            flex-shrink: 0;
+            color: #868e96;
+        }
+
+        /* Dark mode for mobile menu */
+        body.dark-mode .hamburger-btn {
+            background-color: #2a2a4a;
+            border-color: #3a3a5a;
+        }
+
+        body.dark-mode .hamburger-btn:hover {
+            background-color: #3a3a5a;
+        }
+
+        body.dark-mode .hamburger-btn span {
+            background-color: #e9ecef;
+        }
+
+        body.dark-mode .mobile-menu {
+            background-color: #16213e;
+            border-color: #3a3a5a;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .mobile-menu-item {
+            color: #e9ecef;
+        }
+
+        body.dark-mode .mobile-menu-item:hover {
+            background-color: #2a2a4a;
+        }
+
+        body.dark-mode .mobile-menu-item:not(:last-child) {
+            border-bottom-color: #2a2a4a;
+        }
+
+        body.dark-mode .mobile-menu-item svg {
+            color: #adb5bd;
+        }
+
         /* Responsive */
         @media (max-width: 640px) {
             body {
@@ -385,7 +561,7 @@
             .chatbot-container {
                 border-radius: 0;
                 height: 100vh;
-                height: 100dvh; /* Dynamic viewport height for mobile browsers */
+                height: 100dvh;
             }
 
             .faq-buttons {
@@ -393,11 +569,38 @@
             }
 
             .header-title h1 {
-                font-size: 20px;
+                font-size: 18px;
             }
 
-            .clear-history-btn span {
+            .header-title p {
+                font-size: 12px;
+            }
+
+            .avatar {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .avatar svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .chatbot-header {
+                padding: 14px 16px;
+            }
+
+            .header-left {
+                gap: 12px;
+            }
+
+            .desktop-only {
                 display: none;
+            }
+
+            .mobile-only {
+                display: block;
             }
         }
 
@@ -438,6 +641,30 @@
         @keyframes typing {
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-8px); }
+        }
+
+        /* Questions Link Button */
+        .questions-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .questions-link-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #339af0;
+            color: #339af0;
         }
 
         /* Dark Mode Toggle */
@@ -491,7 +718,8 @@
 
         body.dark-mode .clear-history-btn,
         body.dark-mode .theme-toggle,
-        body.dark-mode .air-canvas-btn {
+        body.dark-mode .air-canvas-btn,
+        body.dark-mode .questions-link-btn {
             background-color: #2a2a4a;
             border-color: #3a3a5a;
             color: #e9ecef;
@@ -499,7 +727,8 @@
 
         body.dark-mode .clear-history-btn:hover,
         body.dark-mode .theme-toggle:hover,
-        body.dark-mode .air-canvas-btn:hover {
+        body.dark-mode .air-canvas-btn:hover,
+        body.dark-mode .questions-link-btn:hover {
             background-color: #3a3a5a;
             border-color: #4a4a6a;
         }
@@ -569,6 +798,18 @@
             background-color: #3a3a5a;
             border-color: #4a4a6a;
             color: #e9ecef;
+        }
+
+        body.dark-mode .faq-restore-btn {
+            background-color: #2a2a4a;
+            border-color: #3a3a5a;
+            color: #868e96;
+        }
+
+        body.dark-mode .faq-restore-btn:hover {
+            background-color: #3a3a5a;
+            border-color: #4a4a6a;
+            color: #adb5bd;
         }
 
         body.dark-mode .faq-btn {
@@ -721,6 +962,357 @@
         .modal-btn-secondary:hover {
             background-color: #f8f9fa;
         }
+
+        /* Help Popup */
+        .help-popup {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 340px;
+            max-height: 80vh;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            overflow: hidden;
+            transform: scale(0.8) translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .help-popup.active {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .help-popup-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #868e96;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .help-popup-close:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #495057;
+            transform: rotate(90deg);
+        }
+
+        .help-popup-content {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .help-popup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .help-icon {
+            font-size: 36px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .help-popup-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #212529;
+            margin: 0;
+        }
+
+        .help-popup-subtitle {
+            font-size: 13px;
+            color: #868e96;
+            margin-bottom: 20px;
+            padding-left: 48px;
+        }
+
+        .help-section {
+            margin-bottom: 20px;
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .help-popup.active .help-section:nth-child(1) { animation-delay: 0.1s; }
+        .help-popup.active .help-section:nth-child(2) { animation-delay: 0.2s; }
+        .help-popup.active .help-section:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .help-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #339af0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-icon {
+            font-size: 16px;
+        }
+
+        .help-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .help-list li {
+            font-size: 13px;
+            color: #495057;
+            padding: 6px 0 6px 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .help-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #51cf66;
+            font-weight: bold;
+        }
+
+        .help-features {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .help-feature {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background-color: #e7f5ff;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #1971c2;
+            transition: all 0.2s ease;
+        }
+
+        .help-feature:hover {
+            transform: scale(1.05);
+            background-color: #d0ebff;
+        }
+
+        .feature-icon {
+            font-size: 14px;
+        }
+
+        .help-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed #dee2e6;
+            text-align: center;
+        }
+
+        .help-footer p {
+            font-size: 12px;
+            color: #868e96;
+        }
+
+        /* Help Trigger Button */
+        .help-trigger-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #339af0 0%, #228be6 100%);
+            border: none;
+            box-shadow: 0 4px 15px rgba(51, 154, 240, 0.4);
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .help-trigger-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(51, 154, 240, 0.5);
+        }
+
+        .help-trigger-btn span {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .help-trigger-btn.active {
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            box-shadow: 0 4px 15px rgba(238, 90, 90, 0.4);
+        }
+
+        /* Dark mode for help popup */
+        body.dark-mode .help-popup {
+            background: linear-gradient(135deg, #1e1e3f 0%, #16213e 100%);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .help-popup-header h2 {
+            color: #e9ecef;
+        }
+
+        body.dark-mode .help-popup-subtitle {
+            color: #868e96;
+        }
+
+        body.dark-mode .help-section h3 {
+            color: #74c0fc;
+        }
+
+        body.dark-mode .help-list li {
+            color: #adb5bd;
+        }
+
+        body.dark-mode .help-feature {
+            background-color: #2a2a4a;
+            color: #74c0fc;
+        }
+
+        body.dark-mode .help-feature:hover {
+            background-color: #3a3a5a;
+        }
+
+        body.dark-mode .help-footer {
+            border-top-color: #3a3a5a;
+        }
+
+        body.dark-mode .help-footer p {
+            color: #868e96;
+        }
+
+        body.dark-mode .help-popup-close {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #adb5bd;
+        }
+
+        body.dark-mode .help-popup-close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #e9ecef;
+        }
+
+        /* Responsive for help popup */
+        @media (max-width: 640px) {
+            .help-popup {
+                right: 12px;
+                left: 12px;
+                width: auto;
+                bottom: 80px;
+                max-height: 70vh;
+                border-radius: 16px;
+            }
+
+            .help-popup-content {
+                padding: 20px;
+                max-height: 70vh;
+            }
+
+            .help-popup-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .help-icon {
+                font-size: 28px;
+            }
+
+            .help-popup-header h2 {
+                font-size: 18px;
+            }
+
+            .help-popup-subtitle {
+                padding-left: 0;
+                margin-bottom: 16px;
+            }
+
+            .help-section {
+                margin-bottom: 16px;
+            }
+
+            .help-section h3 {
+                font-size: 13px;
+            }
+
+            .help-list li {
+                font-size: 12px;
+                padding: 4px 0 4px 18px;
+            }
+
+            .help-features {
+                gap: 8px;
+            }
+
+            .help-feature {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .help-footer {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .help-footer p {
+                font-size: 11px;
+            }
+
+            .help-trigger-btn {
+                right: 16px;
+                bottom: 16px;
+                width: 48px;
+                height: 48px;
+            }
+
+            .help-trigger-btn span {
+                font-size: 20px;
+            }
+
+            .help-popup-close {
+                width: 28px;
+                height: 28px;
+                top: 10px;
+                right: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -743,8 +1335,19 @@
                     <p>生成AI協会 ナレッジアシスタント</p>
                 </div>
             </div>
-            <div style="display: flex; align-items: center;">
-                <button class="theme-toggle" id="themeToggle" title="テーマ切り替え">
+            <!-- Desktop buttons -->
+            <div class="header-buttons desktop-only">
+                <a href="/questions" class="questions-link-btn" title="みんなの質問と回答を見る">
+                    みんなの質問と回答
+                </a>
+                <button class="clear-history-btn" id="clearHistoryBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>履歴をクリア</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="テーマ切り替え" style="margin-left: 8px;">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
                         <path d="M12 2V4M12 20V22M4 12H2M22 12H20M5.64 5.64L4.22 4.22M19.78 19.78L18.36 18.36M5.64 18.36L4.22 19.78M19.78 4.22L18.36 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -753,13 +1356,40 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <button class="clear-history-btn" id="clearHistoryBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>履歴をクリア</span>
+            </div>
+
+            <!-- Mobile hamburger menu -->
+            <div class="mobile-menu-container mobile-only">
+                <button class="hamburger-btn" id="hamburgerBtn" title="メニュー">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
+                <div class="mobile-menu" id="mobileMenu">
+                    <a href="/questions" class="mobile-menu-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        みんなの質問と回答
+                    </a>
+                    <button class="mobile-menu-item" id="clearHistoryBtnMobile">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        履歴をクリア
+                    </button>
+                    <button class="mobile-menu-item" id="themeToggleMobile">
+                        <svg class="sun-icon-mobile" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 2V4M12 20V22M4 12H2M22 12H20M5.64 5.64L4.22 4.22M19.78 19.78L18.36 18.36M5.64 18.36L4.22 19.78M19.78 4.22L18.36 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <svg class="moon-icon-mobile" width="18" height="18" style="display:none;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="theme-text">ダークモード</span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -767,6 +1397,15 @@
         <div class="chat-messages" id="chatMessages">
             <!-- Messages will be loaded from localStorage or show welcome message -->
         </div>
+
+        <!-- FAQ Restore Button (shown when FAQ is hidden) -->
+        <button class="faq-restore-btn hidden" id="faqRestoreBtn" title="よくある質問を表示">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            よくある質問
+        </button>
 
         <!-- FAQ Section -->
         <section class="faq-section" id="faqSection">
@@ -821,6 +1460,7 @@
             const faqButtons = document.querySelectorAll('.faq-btn');
             const faqSection = document.getElementById('faqSection');
             const faqCloseBtn = document.getElementById('faqCloseBtn');
+            const faqRestoreBtn = document.getElementById('faqRestoreBtn');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const themeToggle = document.getElementById('themeToggle');
 
@@ -856,22 +1496,89 @@
             themeToggle.addEventListener('click', toggleTheme);
             initTheme();
 
-            // FAQ Section Close
+            // Mobile Menu
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const clearHistoryBtnMobile = document.getElementById('clearHistoryBtnMobile');
+            const themeToggleMobile = document.getElementById('themeToggleMobile');
+
+            function toggleMobileMenu() {
+                hamburgerBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            }
+
+            function closeMobileMenu() {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+
+            hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+            // Mobile theme toggle
+            function updateMobileThemeIcon(isDark) {
+                const sunIconMobile = document.querySelector('.sun-icon-mobile');
+                const moonIconMobile = document.querySelector('.moon-icon-mobile');
+                const themeText = document.querySelector('.theme-text');
+                if (isDark) {
+                    sunIconMobile.style.display = 'none';
+                    moonIconMobile.style.display = 'block';
+                    themeText.textContent = 'ライトモード';
+                } else {
+                    sunIconMobile.style.display = 'block';
+                    moonIconMobile.style.display = 'none';
+                    themeText.textContent = 'ダークモード';
+                }
+            }
+
+            // Initialize mobile theme icon
+            updateMobileThemeIcon(document.body.classList.contains('dark-mode'));
+
+            themeToggleMobile.addEventListener('click', () => {
+                toggleTheme();
+                updateMobileThemeIcon(document.body.classList.contains('dark-mode'));
+                closeMobileMenu();
+            });
+
+            // Mobile clear history
+            clearHistoryBtnMobile.addEventListener('click', () => {
+                clearHistory();
+                closeMobileMenu();
+            });
+
+            // Close menu on outside click
+            document.addEventListener('click', (e) => {
+                if (mobileMenu.classList.contains('active') &&
+                    !mobileMenu.contains(e.target) &&
+                    !hamburgerBtn.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            });
+
+            // FAQ Section Close/Restore
             const STORAGE_KEY_FAQ_HIDDEN = 'gaispedia_faq_hidden';
 
             function initFaqSection() {
-                const isHidden = sessionStorage.getItem(STORAGE_KEY_FAQ_HIDDEN) === 'true';
+                const isHidden = localStorage.getItem(STORAGE_KEY_FAQ_HIDDEN) === 'true';
                 if (isHidden) {
                     faqSection.classList.add('hidden');
+                    faqRestoreBtn.classList.remove('hidden');
                 }
             }
 
             function closeFaqSection() {
                 faqSection.classList.add('hidden');
-                sessionStorage.setItem(STORAGE_KEY_FAQ_HIDDEN, 'true');
+                faqRestoreBtn.classList.remove('hidden');
+                localStorage.setItem(STORAGE_KEY_FAQ_HIDDEN, 'true');
+            }
+
+            function restoreFaqSection() {
+                faqSection.classList.remove('hidden');
+                faqRestoreBtn.classList.add('hidden');
+                localStorage.setItem(STORAGE_KEY_FAQ_HIDDEN, 'false');
             }
 
             faqCloseBtn.addEventListener('click', closeFaqSection);
+            faqRestoreBtn.addEventListener('click', restoreFaqSection);
             initFaqSection();
 
             // Modal elements
@@ -1028,6 +1735,8 @@
                         conversationHistory.push({ role: 'model', content: data.message });
                         // Save to localStorage
                         saveToLocalStorage();
+                        // Save question to database (for みんなの質問)
+                        saveQuestionToDb(text, data.message);
                     } else {
                         addMessage('エラーが発生しました: ' + (data.error || '不明なエラー'), 'bot');
                     }
@@ -1143,6 +1852,23 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
+            // Save question to database
+            async function saveQuestionToDb(question, answer) {
+                try {
+                    await fetch('/api/questions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({ question, answer }),
+                    });
+                } catch (error) {
+                    console.error('Failed to save question:', error);
+                }
+            }
+
             // Clear chat history
             function clearHistory() {
                 conversationHistory = [];
@@ -1168,8 +1894,92 @@
                     sendMessage(question);
                 });
             });
+
+            // Help Popup
+            const helpPopup = document.getElementById('helpPopup');
+            const helpTriggerBtn = document.getElementById('helpTriggerBtn');
+            const helpPopupClose = document.getElementById('helpPopupClose');
+
+            function toggleHelpPopup() {
+                helpPopup.classList.toggle('active');
+                helpTriggerBtn.classList.toggle('active');
+            }
+
+            helpTriggerBtn.addEventListener('click', toggleHelpPopup);
+            helpPopupClose.addEventListener('click', toggleHelpPopup);
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (helpPopup.classList.contains('active') &&
+                    !helpPopup.contains(e.target) &&
+                    !helpTriggerBtn.contains(e.target)) {
+                    toggleHelpPopup();
+                }
+            });
         });
     </script>
+
+    <!-- Help Popup -->
+    <div class="help-popup" id="helpPopup">
+        <button class="help-popup-close" id="helpPopupClose">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <div class="help-popup-content">
+            <div class="help-popup-header">
+                <span class="help-icon">&#129302;</span>
+                <h2>GAISペディアへようこそ！</h2>
+            </div>
+            <p class="help-popup-subtitle">生成AI協会（GAIS）の公式ナレッジアシスタントです</p>
+
+            <div class="help-section">
+                <h3><span class="section-icon">&#128269;</span> できること</h3>
+                <ul class="help-list">
+                    <li>GAISのイベント・勉強会情報を検索</li>
+                    <li>会員制度や入会方法について質問</li>
+                    <li>ワーキンググループの活動内容を確認</li>
+                    <li>過去のセミナー情報を探す</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3><span class="section-icon">&#128161;</span> 使い方のコツ</h3>
+                <ul class="help-list">
+                    <li>具体的に質問すると正確な回答が得られます</li>
+                    <li>「次回の勉強会は？」「会員になるには？」など</li>
+                    <li>よくある質問ボタンも活用してください</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3><span class="section-icon">&#9881;&#65039;</span> 機能</h3>
+                <div class="help-features">
+                    <div class="help-feature">
+                        <span class="feature-icon">&#127769;</span>
+                        <span>ダークモード</span>
+                    </div>
+                    <div class="help-feature">
+                        <span class="feature-icon">&#128172;</span>
+                        <span>みんなの質問</span>
+                    </div>
+                    <div class="help-feature">
+                        <span class="feature-icon">&#128190;</span>
+                        <span>履歴保存</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-footer">
+                <p>&#128293; gais.jp の情報をリアルタイムで検索します</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button class="help-trigger-btn" id="helpTriggerBtn" title="使い方を見る">
+        <span>?</span>
+    </button>
 
     <!-- Storage Warning Modal -->
     <div class="modal-overlay" id="storageModal">

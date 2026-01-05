@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\GaisPage;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -13,16 +15,13 @@ class GeminiService
     private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta';
 
     /**
-     * Key pages from gais.jp to use as context
+     * Fallback URLs if DB is empty
      */
-    private array $gaisUrls = [
+    private array $fallbackUrls = [
         'https://gais.jp/',
         'https://gais.jp/information/',
         'https://gais.jp/official_member_information/',
         'https://gais.jp/member_rule/',
-        'https://gais.jp/category/news/',
-        'https://gais.jp/category/events/',
-        'https://gais.jp/category/wg/',
         'https://gais.jp/inquiry/',
     ];
 
@@ -139,7 +138,9 @@ class GeminiService
     }
 
     /**
-     * Chat with URL Context - fetches gais.jp pages for accurate answers
+     * Chat with 2-step approach:
+     * 1. Select relevant URLs from DB using Gemini
+     * 2. Fetch those URLs with url_context and answer
      *
      * @param string $message User's message
      * @param array $history Previous conversation history
@@ -147,13 +148,20 @@ class GeminiService
      */
     public function simpleChat(string $message, array $history = []): array
     {
-        // Build the prompt with URLs for context
-        $urlList = implode("\n", $this->gaisUrls);
+        // Step 1: Get page list from DB and select relevant URLs
+        $relevantUrls = $this->selectRelevantUrls($message);
 
+        if (empty($relevantUrls)) {
+            $relevantUrls = $this->fallbackUrls;
+        }
+
+        $urlList = implode("\n", $relevantUrls);
+
+        // Step 2: Fetch URLs and answer
         $promptWithUrls = <<<PROMPT
-以下のgais.jp公式ページの内容を参照して、ユーザーの質問に回答してください。
+以下のgais.jp公式ページを参照して、ユーザーの質問に回答してください。
 
-【参照するページ】
+【参照ページ】
 {$urlList}
 
 【ユーザーの質問】
@@ -163,33 +171,15 @@ PROMPT;
         $systemPrompt = <<<SYSTEM
 あなたは「GAISペディア」、生成AI協会（GAIS）の公式ナレッジアシスタントです。
 
-【最重要ルール - 必ず守ること】
-★ 回答は必ず日本語で行ってください。英語での回答は禁止です。
-★ ユーザーが英語で質問しても、日本語で回答してください。
+【最重要】必ず日本語で回答してください。英語での回答は禁止です。
 
-【重要なルール】
-1. 提供されたgais.jpのページ内容のみを参照して回答してください
-2. ページに記載されていない情報は「公式サイトに該当する情報が見つかりませんでした」と回答してください
-3. 日本語で丁寧に回答してください
-4. 必要に応じて箇条書きや表形式を使って読みやすくしてください
-5. 回答の最後に参照したページのリンクを必ず記載してください
-6. 回答がわからない場合は「公式サイトに該当する情報が見つかりませんでした」と正直に回答してください
-7. イベント情報に関して現時点と比較して、過去の日付の場合は「そのイベントは既に終了しています」と回答してください
-
-【参照リンクのルール】
-- 回答の最後に「参照リンク:」セクションを追加してください
-- 実際に参照したgais.jpのページURLのみを表示してください
-- 形式: - [ページタイトル](https://gais.jp/実際のパス/)
-- 参照していないページのリンクは表示しないでください
-- URLは提供されたURLリストから選んでください（創作禁止）
-
-【例】
-参照リンク:
-- [正会員のご案内](https://gais.jp/official_member_information/)
-- [会員規則](https://gais.jp/member_rule/)
+【ルール】
+1. 提供されたgais.jpのページ内容のみを参照して回答
+2. 該当する情報がない場合は「該当する情報が見つかりませんでした」と回答
+3. 過去のイベントは「終了済み」と明記
+4. 回答の最後に参照したページのURLを記載
 SYSTEM;
 
-        // Use URL Context tool
         $tools = [
             ['url_context' => new \stdClass()]
         ];
@@ -198,12 +188,93 @@ SYSTEM;
     }
 
     /**
-     * Get the list of GAIS URLs used for context
+     * Select relevant URLs from DB using Gemini
      *
-     * @return array
+     * @param string $message User's question
+     * @return array Selected URLs (max 3)
      */
-    public function getGaisUrls(): array
+    private function selectRelevantUrls(string $message): array
     {
-        return $this->gaisUrls;
+        // Get all pages from DB (newest first), exclude AI news
+        $pages = GaisPage::active()
+            ->where('title', 'not like', '%生成AIニュース%')
+            ->where('url', 'not like', '%ai-news%')
+            ->orderByDesc('event_date')
+            ->orderByDesc('published_at')
+            ->get();
+
+        if ($pages->isEmpty()) {
+            Log::warning('No pages in DB, using fallback URLs');
+            return $this->fallbackUrls;
+        }
+
+        // Build page list for Gemini with rich info
+        $pageList = [];
+        foreach ($pages as $page) {
+            $line = "[{$page->id}] {$page->title}";
+
+            // 日付情報
+            if ($page->event_date) {
+                $line .= " [開催:{$page->event_date->format('Y/m/d')}]";
+            } elseif ($page->published_at) {
+                $line .= " [投稿:{$page->published_at->format('Y/m/d')}]";
+            }
+
+            // 内容（150文字まで）
+            if ($page->content) {
+                $line .= "\n  " . mb_substr($page->content, 0, 150);
+            }
+
+            $pageList[] = $line;
+        }
+        $pageListText = implode("\n", $pageList);
+
+        // Ask Gemini to select relevant pages
+        $selectPrompt = <<<PROMPT
+以下はgais.jp（生成AI協会）のページ一覧です。
+ユーザーの質問に回答するために最も関連性の高いページを最大3つ選んでください。
+
+【ページ一覧】
+{$pageListText}
+
+【ユーザーの質問】
+{$message}
+
+【注意】
+- 「次回」「今後」の質問には、開催日が未来のページを優先
+- 最新の情報が必要な場合は、投稿日が新しいページを優先
+- 基本情報（会員、入会など）の質問には該当ページを選択
+- 最大3つまで。本当に関連性の高いものだけを選ぶ
+
+【回答形式】
+関連するページのIDをカンマ区切りで出力してください。
+例: 1,5,12
+IDのみを出力し、説明は不要です。
+PROMPT;
+
+        $result = $this->chat($selectPrompt, [], 'あなたはページ選択アシスタントです。指示に従ってIDのみを出力してください。', []);
+
+        if (!$result['success']) {
+            Log::warning('Failed to select URLs', ['error' => $result['error'] ?? 'unknown']);
+            return $this->fallbackUrls;
+        }
+
+        // Parse selected IDs
+        $responseText = $result['message'];
+        preg_match_all('/\d+/', $responseText, $matches);
+        $selectedIds = array_map('intval', $matches[0] ?? []);
+        $selectedIds = array_slice($selectedIds, 0, 3); // Limit to 3
+
+        if (empty($selectedIds)) {
+            return $this->fallbackUrls;
+        }
+
+        // Get URLs for selected IDs
+        $selectedPages = GaisPage::whereIn('id', $selectedIds)->get();
+        $urls = $selectedPages->pluck('url')->toArray();
+
+        Log::info('Selected URLs', ['count' => count($urls), 'ids' => $selectedIds]);
+
+        return $urls;
     }
 }
