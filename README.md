@@ -538,6 +538,3 @@ docker-compose exec app php artisan scrape:gais
 - [Tailwind CSS](https://tailwindcss.com/) - CSSフレームワーク
 - [AWS](https://aws.amazon.com/) - クラウドインフラ
 
-### 謝辞
-
-本サービスは、生成AI協会（GAIS）の公式情報をより多くの方に届けることを目的として開発されました。GAISの活動と、AI技術の発展に敬意を表します。
