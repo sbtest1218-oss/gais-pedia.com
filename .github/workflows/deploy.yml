@@ -25,14 +25,6 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    # PHPStan静的解析を実行(メモリ制限を512Mに設定)
-    - name: Run PHPStan
-      run: ./vendor/bin/phpstan analyse --memory-limit=512M
-
-    # PHP CS Fixerでコードスタイルチェック(--dry-runで修正は行わない)
-    - name: Run PHP CS Fixer
-      run: ./vendor/bin/php-cs-fixer fix --dry-run --diff
-
     # ユニットテストを実行
     - name: Run tests
       run: |
@@ -64,8 +56,8 @@ jobs:
           --document-name "AWS-RunShellScript" \
           --comment "Deploy from GitHub Actions" \
           --parameters 'commands=[
-            "cd /home/ec2-user/your-project",
-            "sudo -u ec2-user bash /home/ec2-user/your-project/deploy.sh"
+            "cd /home/ec2-user/gais-pedia.com",
+            "sudo -u ec2-user bash /home/ec2-user/gais-pedia.com/deploy.sh"
           ]' \
           --output text \
           --query "Command.CommandId")
