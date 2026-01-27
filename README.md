@@ -541,15 +541,3 @@ docker-compose exec app php artisan scrape:gais
 ### 謝辞
 
 本サービスは、生成AI協会（GAIS）の公式情報をより多くの方に届けることを目的として開発されました。GAISの活動と、AI技術の発展に敬意を表します。
-
----
-
-## お問い合わせ
-
-本サービスに関するお問い合わせは、以下までご連絡ください。
-
-- **サービスURL**: https://gais-pedia.com
-
----
-
-**© 2025 GAISペディア. All rights reserved.**
