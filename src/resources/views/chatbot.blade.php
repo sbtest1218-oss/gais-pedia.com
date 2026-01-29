@@ -1431,8 +1431,8 @@
                 <button class="faq-btn" data-question="建築土木WGの活動内容は？">
                     建築土木WGの活動内容は？
                 </button>
-                <button class="faq-btn" data-question="正会員と準会員の違いは？">
-                    正会員と準会員の違いは？
+                <button class="faq-btn" data-question="スクラムはゲーム！">
+                    スクラムはゲーム！
                 </button>
             </div>
         </section>
