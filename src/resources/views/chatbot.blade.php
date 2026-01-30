@@ -1594,7 +1594,7 @@
             const STORAGE_WARNING_SIZE = 50 * 1024 * 1024; // 50MB in bytes
 
             // Default welcome message
-            const WELCOME_MESSAGE = 'GAISペディアへようこそ！\n\n生成AI協会（GAIS）に関するご質問にお答えします。\n何かお手伝いできることはありますか？';
+            const WELCOME_MESSAGE = 'CSDの生徒さんのレベルが高い！講師の方が勉強になる！スクラムを楽しもう！';
 
             // Conversation history for context
             let conversationHistory = [];
